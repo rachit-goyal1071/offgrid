@@ -9,9 +9,16 @@ import SwiftUI
 
 @main
 struct OffGridApp: App {
+    
+    @State var theme: Theme = .init()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .applyTheme(theme)
+                .environment(theme)
+                .onAppear() {
+                    theme.applyTheme(themeName: .limeDark)
+                }
         }
     }
 }
