@@ -4,6 +4,12 @@ struct SpotCard: View {
     var spot: Spot
     
     @Environment(Theme.self) private var theme
+    @State var savedStore: SavedStore
+    
+    init (spot: Spot) {
+        _savedStore = State(initialValue: container.savedStore)
+        self.spot = spot
+    }
     
     var body: some View {
         
@@ -32,6 +38,31 @@ struct SpotCard: View {
                     .lineLimit(1)
                     .padding(.leading, 8)
                     .padding(.bottom, 8)
+            }
+            .overlay(alignment: .topTrailing) {
+                Button(action: {
+                    savedStore.toggle(id: spot.id)
+                }) {
+                    Image(systemName: savedStore.isSaved(id: spot.id) ? "bookmark.fill" : "bookmark")
+                        .resizable()
+                        .frame(width: 12)
+                        .frame(height: 14)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 9)
+                        .foregroundStyle(
+                            savedStore.isSaved(id: spot.id) ? theme.accentNeon : theme.textPrimary
+                        )
+                        .animation(.easeInOut(duration: 0.15), value: savedStore.isSaved(id: spot.id))
+                        .background(
+                            RoundedRectangle(cornerRadius: 999)
+                                .fill(theme.bgRaised.opacity(0.8))
+                        )
+                        .padding(.top, 8)
+                        .padding(.trailing, 8)
+                        .frame(width: 44)
+                        .frame(height: 44)
+                        .containerShape(Rectangle())
+                }
             }
             
             VStack(alignment: .leading, spacing: 0){

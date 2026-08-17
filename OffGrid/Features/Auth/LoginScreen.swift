@@ -5,11 +5,9 @@ struct LoginScreen: View {
     @Environment(Theme.self) private var theme: Theme
     @State private var handle: String = ""
     @State private var store: AuthStore
-    private let onSuccess: () -> Void
     
-    init(onSuccess: @escaping () -> Void) {
-        _store = State(initialValue: container.authStore())
-        self.onSuccess = onSuccess
+    init() {
+        _store = State(initialValue: container.authStore)
     }
     
     
@@ -54,13 +52,14 @@ struct LoginScreen: View {
             
             Button(action: {
                 Task {
+                    guard store.state != .loading else { return }
                     await store.login(userHandle: handle)
                 }
             }) {
                 switch store.state {
                 case .loading:
                     ProgressView()
-                        .foregroundStyle(theme.textPrimary)
+                        .tint(theme.accentInk)
                 case .loaded, .failed, .idle:
                     Text("that's me")
                         .font(.headline)
@@ -76,11 +75,6 @@ struct LoginScreen: View {
             .frame(alignment: .center)
             
             Spacer()
-        }
-        .onChange(of: store.state) {_, newState in
-            if case .loaded = newState {
-                onSuccess()
-            }
         }
         .frame(alignment: .topLeading)
         .padding(.horizontal, 20)
