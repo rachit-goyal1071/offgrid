@@ -10,8 +10,19 @@
 		F9C3694D301F12330013743B /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = F9C3694C301F12330013743B /* Supabase */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		F9C0E4773031A006005AC5FD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F996F6712FF9631300CD0D58 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F996F6782FF9631300CD0D58;
+			remoteInfo = OffGrid;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		F996F6792FF9631300CD0D58 /* OffGrid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OffGrid.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9C0E4733031A006005AC5FD /* OffGridTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OffGridTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -33,6 +44,11 @@
 			path = OffGrid;
 			sourceTree = "<group>";
 		};
+		F9C0E4743031A006005AC5FD /* OffGridTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = OffGridTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +60,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F9C0E4703031A006005AC5FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -51,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				F996F67B2FF9631300CD0D58 /* OffGrid */,
+				F9C0E4743031A006005AC5FD /* OffGridTests */,
 				F9C36948301F12070013743B /* Frameworks */,
 				F996F67A2FF9631300CD0D58 /* Products */,
 			);
@@ -60,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				F996F6792FF9631300CD0D58 /* OffGrid.app */,
+				F9C0E4733031A006005AC5FD /* OffGridTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -97,6 +122,29 @@
 			productReference = F996F6792FF9631300CD0D58 /* OffGrid.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F9C0E4723031A006005AC5FD /* OffGridTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F9C0E4793031A006005AC5FD /* Build configuration list for PBXNativeTarget "OffGridTests" */;
+			buildPhases = (
+				F9C0E46F3031A006005AC5FD /* Sources */,
+				F9C0E4703031A006005AC5FD /* Frameworks */,
+				F9C0E4713031A006005AC5FD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F9C0E4783031A006005AC5FD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F9C0E4743031A006005AC5FD /* OffGridTests */,
+			);
+			name = OffGridTests;
+			packageProductDependencies = (
+			);
+			productName = OffGridTests;
+			productReference = F9C0E4733031A006005AC5FD /* OffGridTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -104,11 +152,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2620;
+				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					F996F6782FF9631300CD0D58 = {
 						CreatedOnToolsVersion = 26.2;
+					};
+					F9C0E4723031A006005AC5FD = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = F996F6782FF9631300CD0D58;
 					};
 				};
 			};
@@ -130,12 +182,20 @@
 			projectRoot = "";
 			targets = (
 				F996F6782FF9631300CD0D58 /* OffGrid */,
+				F9C0E4723031A006005AC5FD /* OffGridTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F996F6772FF9631300CD0D58 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F9C0E4713031A006005AC5FD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -152,7 +212,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F9C0E46F3031A006005AC5FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F9C0E4783031A006005AC5FD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F996F6782FF9631300CD0D58 /* OffGrid */;
+			targetProxy = F9C0E4773031A006005AC5FD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		F996F6822FF9631500CD0D58 /* Debug */ = {
@@ -363,6 +438,51 @@
 			};
 			name = Release;
 		};
+		F9C0E47A3031A006005AC5FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tourist.OffGridTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OffGrid.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OffGrid";
+			};
+			name = Debug;
+		};
+		F9C0E47B3031A006005AC5FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tourist.OffGridTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OffGrid.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OffGrid";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -380,6 +500,15 @@
 			buildConfigurations = (
 				F996F6852FF9631500CD0D58 /* Debug */,
 				F996F6862FF9631500CD0D58 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F9C0E4793031A006005AC5FD /* Build configuration list for PBXNativeTarget "OffGridTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F9C0E47A3031A006005AC5FD /* Debug */,
+				F9C0E47B3031A006005AC5FD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
