@@ -16,14 +16,22 @@ final class DependencyContainer {
     }
     
     // MARK: - LoginScreen Section
-    lazy var authService: () -> AuthService = {
-        AuthService(client: self.supabase)
+    lazy var authService: () -> AuthRepositoryImpl = {
+        AuthRepositoryImpl(client: self.supabase)
     }
     
-    lazy var authStore: () -> AuthStore = {
+    lazy var authStore: AuthStore = {
         AuthStore(service: self.authService())
+    }()
+    
+    // MARK: SavedScreen Section
+    lazy var savedRepository: () -> SavedSpotRepository = {
+        UserDefaultsSavedSpotRepositoryImpl()
     }
     
+    lazy var savedStore: SavedStore = {
+        SavedStore(repository: self.savedRepository())
+    }()
     
 }
 
