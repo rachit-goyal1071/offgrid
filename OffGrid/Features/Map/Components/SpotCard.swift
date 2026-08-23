@@ -63,6 +63,7 @@ struct SpotCard: View {
                         .frame(height: 44)
                         .containerShape(Rectangle())
                 }
+                .onAppear { container.savedStore.refresh() }
             }
             
             VStack(alignment: .leading, spacing: 0){

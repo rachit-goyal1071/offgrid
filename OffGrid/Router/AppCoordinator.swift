@@ -5,7 +5,6 @@ final class AppCoordinator {
     enum Tab { case map, saved, post, profile}
     
     var selectedTab: Tab = .map
-    var isAuthenticated: Bool = false
     var modal: ModalFlow?
     
     let mapRouter = Router()
@@ -21,7 +20,7 @@ final class AppCoordinator {
         }
     }
     
-    func handle(_ url: URL) {
+    func handleUrl(_ url: URL) {
         guard let link = DeepLinkParser.parse(url) else { return }
         switch link {
         case .mapScreen:

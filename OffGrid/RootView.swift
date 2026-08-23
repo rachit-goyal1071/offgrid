@@ -4,22 +4,36 @@ struct RootView: View {
     
     @Environment(Theme.self) private var theme
     @Environment(\.[\.spotRepository]) private var spotRepository
-    @State private var app =  AppCoordinator()
+    @State private var app = AppCoordinator()
     private let factory = DestinationFactory()
+    @State private var store: AuthStore
     
     init() {
-        app.isAuthenticated = SessionStore().isLoggedIn
+        _store = State(initialValue: container.authStore)
     }
     
     var body: some View {
         Group {
-            if app.isAuthenticated {
-                mainTabs
+            if store.state == .idle {
+                ProgressView()
+                    .tint(theme.accentNeon)
             } else {
-                LoginScreen(onSuccess: { app.isAuthenticated = true })
+                mainTabs
+                    .task {
+                        if store.state == .loggedOut {
+                            await store.login()
+                        }
+                    }
+                    .sheet(item: $app.modal) { factory.makeSheet(for: $0) }
+                    .environment(app)
             }
         }
         .tint(theme.accentNeon)
+        .onAppear() {
+            Task {
+                await store.listenAuthEvents()
+            }
+        }
     }
     
     private var mainTabs: some View {
@@ -34,7 +48,7 @@ struct RootView: View {
             PostScreen()
                 .tabItem { Label("post", systemImage: "plus.circle") }
                 .tag(AppCoordinator.Tab.post)
-            ProfileScreen(onLogout: { app.isAuthenticated = false })
+            ProfileScreen()
                 .tabItem { Label("you", systemImage: "person") }
                 .tag(AppCoordinator.Tab.profile)
         }
@@ -48,36 +62,9 @@ struct RootView: View {
                     factory.makeView(for: destination)
                 }
         }
-        .sheet(item: $router.sheet) { destination in
-            factory.makeView(for: destination)
+        .sheet(item: $router.sheet) {
+            factory.makeSheet(for: $0)
         }
         .environment(router)
     }
 }
-
-//class TabBarSection: Identifiable {
-//    var title: String
-//    var icon: String
-//    var screen: any View
-//    
-//    init(title: String, icon: String, screen: any View) {
-//        self.title = title
-//        self.icon = icon
-//        self.screen = screen
-//    }
-//}
-//
-//var availableSections: [TabBarSection] = [
-//    .init(title: "map", icon: "map", screen: MapScreen()),
-//    .init(title: "saved", icon: "book.fill", screen: SavedScreen()),
-//    .init(title: "post", icon: "plus", screen: PostScreen()),
-//    .init(title: "profile", icon: "person.crop.circle", screen: ProfileScreen())
-//]
-
-//#Preview {
-//    @State var theme: Theme = .init()
-//    RootView()
-//        .environment(theme)
-//        .applyTheme(theme)
-//    
-//}

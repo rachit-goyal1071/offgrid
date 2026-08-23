@@ -1,13 +1,15 @@
 import SwiftUI
 
-struct LoginScreen: View {
+struct HandleClaimSheet: View {
     
     @Environment(Theme.self) private var theme: Theme
     @State private var handle: String = ""
-    @State private var store: AuthStore
+    @State private var store: ProfileStore
+    @State private var status: HandleUpdateStatus = .unknown
+    @Environment(AppCoordinator.self) private var app
     
     init() {
-        _store = State(initialValue: container.authStore)
+        _store = State(initialValue: container.profileStore)
     }
     
     
@@ -18,14 +20,14 @@ struct LoginScreen: View {
                 .foregroundStyle(theme.textPrimary)
             
             Text("this is what shows next to your pins. pick something you'd shout across a street.")
-                .font(.headline)
+                .font(.heading)
                 .foregroundStyle(theme.textSecondary)
             
             HStack(spacing: 4) {
                 Text("@")
                     .foregroundStyle(theme.textTertiary)
                     .font(.body)
-
+                
                 TextField("username", text: $handle)
                     .textFieldStyle(.plain)
                     .foregroundStyle(theme.textPrimary)
@@ -33,40 +35,55 @@ struct LoginScreen: View {
                     .autocorrectionDisabled(true)
                     .onChange(of: handle) { _, newValue in
                         handle = newValue.lowercased()
+                        status = .unknown
                     }
+                Spacer()
+                if status == .handleAlreadyExists {
+                    Text("taken")
+                        .foregroundStyle(theme.statusNegative)
+                        .font(.chipS)
+                }
             }
             .padding(10)
-            .frame(maxWidth: .greatestFiniteMagnitude)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(theme.bgRaised)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(theme.accentNeon, lineWidth: 1)
+                    .stroke(
+                        status == .error || status == .handleAlreadyExists || status == .invalidLength ?
+                        theme.statusNegative : theme.accentNeon,
+                        lineWidth: 1
+                    )
             )
             
             Text("lowercase only, obviously. you can change it once a year.")
-                .font(.headline)
+                .font(.heading)
                 .foregroundStyle(theme.textTertiary)
             
             Button(action: {
                 Task {
-                    guard store.state != .loading else { return }
-                    await store.login(userHandle: handle)
+                    guard store.handleState != .loading else { return }
+                    guard handle.count > 3 else { return }
+                    status = await store.claimHandle(handle: handle)
+                    if status == .success {
+                        app.modal = nil
+                    }
+                    debugPrint("Current status is \(status)")
                 }
             }) {
-                switch store.state {
+                switch store.handleState {
                 case .loading:
                     ProgressView()
                         .tint(theme.accentInk)
-                case .loaded, .failed, .idle:
+                default:
                     Text("that's me")
-                        .font(.headline)
+                        .font(.heading)
                         .foregroundStyle(theme.accentInk)
                 }
             }
-            .frame(maxWidth: .greatestFiniteMagnitude)
+            .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
             .background(
                 RoundedRectangle(cornerRadius: 12)

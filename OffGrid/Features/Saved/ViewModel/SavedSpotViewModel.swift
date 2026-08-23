@@ -15,6 +15,11 @@ class SavedSpotViewModel: ObservableObject {
     let spotRepository: SpotRepository
     let savedRepository: SavedSpotRepository
     
+    var availableSpots: [Spot] {
+        guard case .loaded(let spots) = state else { return [] }
+        return spots
+    }
+    
     init(spotRepository: SpotRepository, savedRepository: SavedSpotRepository) {
         self.spotRepository = spotRepository
         self.savedRepository = savedRepository
@@ -39,6 +44,18 @@ class SavedSpotViewModel: ObservableObject {
     
     func unsave(id: UUID) async {
         savedRepository.toggle(id: id)
-        await load()
+        do {
+            let allSpots = try await spotRepository.fetchSpots()
+            let savedSpotIds = savedRepository.getSavedIds()
+            let savedSpots = allSpots.filter( { savedSpotIds.contains($0.id) })
+            if !savedSpots.isEmpty {
+                state = .loaded(savedSpots)
+            } else {
+                state = .empty
+            }
+            
+        } catch {
+            state = .failed
+        }
     }
 }

@@ -8,4 +8,12 @@ struct DestinationFactory {
 //            
 //        }
     }
+    
+    @ViewBuilder
+    func makeSheet(for sheets: ModalFlow) -> some View {
+        switch sheets {
+        case .claimHandle:
+            HandleClaimSheet()
+        }
+    }
 }

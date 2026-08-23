@@ -3,105 +3,141 @@ import SwiftUI
 
 class SpotCell: UICollectionViewCell {
     
-    private var theme: Theme
-    private var spot: Spot
-    private var quoteText: String
-    
-    init(frame: CGRect, theme: Theme, spot: Spot, quoteText: String) {
-        self.theme = theme
-        self.quoteText = quoteText
-        self.spot = spot
-        super.init(frame: frame)
-    }
+    private var theme: Theme?
+    private var spot: Spot?
+    let stackView = UIStackView()
+    let spotLabel = UILabel()
+    let quoteLabel = UILabel()
+    let handleLabel = UILabel()
+    let chipContainer = UIView()
+    let vibeLabel = UILabel()
+    let verifiedTick = UIImageView()
+    let statusLabel = UILabel()
+    let statusText = UIStackView()
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupViews()
     }
     
-    override var contentView: UIView {
-        let view = UIStackView()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViews()
+    }
+    
+    func configure(spot: Spot, theme: Theme) {
+        self.spot = spot
+        self.theme = theme
+        contentView.backgroundColor = UIColor(theme.bgRaised)
+        contentView.layer.borderColor = UIColor(theme.stroke).cgColor
         
-        view.backgroundColor = UIColor(theme.bgRaised)
-        view.layer.cornerRadius = 16
-        view.layer.cornerCurve = .continuous
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.borderColor = UIColor(theme.stroke).cgColor
-        view.layer.borderWidth = 1.0
-        return view
+        spotLabel.text = spot.name
+        spotLabel.textColor = UIColor(theme.textPrimary)
+        
+        quoteLabel.text = spot.description
+        quoteLabel.textColor = UIColor(theme.textSecondary)
+        
+        handleLabel.text = "\(spot.posterHandle) •"
+        handleLabel.textColor = UIColor(theme.textSecondary)
+        
+        verifiedTick.tintColor = UIColor(theme.accentNeon)
+        
+        if spot.verified {
+            statusLabel.text = "local"
+            statusLabel.textColor = UIColor(theme.accentNeon)
+            verifiedTick.isHidden = false
+            
+        } else {
+            statusLabel.text = "pending"
+            statusLabel.textColor = UIColor(theme.statusPending)
+            verifiedTick.isHidden = true
+        }
+        
+        chipContainer.layer.borderColor = UIColor(theme.accentNeon).cgColor
+        
+        vibeLabel.text = spot.vibe.rawValue
+        vibeLabel.textColor = UIColor(theme.accentNeon)
     }
     
-    func dataRow(views: [UIView]) -> UIView {
+    func setupViews() {
+
+        contentView.layer.cornerRadius = 16
+        contentView.layer.borderWidth = 1.0
+        contentView.layer.cornerCurve = .continuous
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        
+        self.contentView.addSubview(stackView)
+        
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 14),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -14),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+        ])
+        
+        let spacer = UIView()
+        spacer.setContentHuggingPriority(UILayoutPriority(1), for: .horizontal)
+        
+        let rowOne = dataRow(views: [spotView])
+        let rowTwo = dataRow(views: [quoteView])
+        let rowThree = dataRow(views: [vibeChip, handleView, statusView, spacer])
+        
+        [rowOne, rowTwo, rowThree].forEach { stackView.addArrangedSubview($0) }
+    }
+    
+    func dataRow(views: [UIView], spacing: CGFloat = 8) -> UIView {
         let view = UIStackView()
+        view.spacing = spacing
         
         views.forEach { view.addArrangedSubview($0) }
         view.axis = .horizontal
         return view
     }
     
-    var spotLabel: UIView {
-        let label = UILabel()
-        
-        label.text = spot.name
-        label.textColor = UIColor(theme.textPrimary)
-        label.font = UIFont.heading
-        return label
+    var spotView: UIView {
+        spotLabel.font = UIFont.heading
+        return spotLabel
     }
-    
-    var quoteLabel: UIView {
-        let label = UILabel()
-        
-        label.text = quoteText
-        label.textColor = UIColor(theme.textSecondary)
-        label.font = UIFont.body
-        return label
-    }
-    
-    var handleLabel: UIView {
-        let label = UILabel()
-        
-        label.text = "\(spot.posterHandle) •"
-        label.textColor = UIColor(theme.textSecondary)
-        label.font = UIFont.caption
-        return label
-    }
-    
-    var statusText: UIView {
-        let view = UIStackView()
-        let label = UILabel()
-        let verifiedTick = UIImageView()
-        
-        verifiedTick.image = UIImage(systemName: "checkmark.circle.fill")
-        verifiedTick.tintColor = UIColor(theme.accentNeon)
-        view.axis = .horizontal
-        
-        if spot.verified {
-            label.textColor = UIColor(theme.accentNeon)
-            label.text = "local"
-            label.font = UIFont.caption
-            view.addArrangedSubview(verifiedTick)
-        } else {
-            label.textColor = UIColor(theme.statusPending)
-            label.text = "pending"
-        }
-        
-        view.addArrangedSubview(label)
-        
-        return view
+
+    var quoteView: UIView {
+        quoteLabel.font = UIFont.body
+        quoteLabel.numberOfLines = 0
+        return quoteLabel
     }
     
     var vibeChip: UIView {
-        let view = UIView()
-        let label = UILabel()
+        chipContainer.layer.borderWidth = 1.0
+        chipContainer.layer.cornerRadius = 10
+        vibeLabel.font = UIFont.monoStamp
+        chipContainer.insertSubview(vibeLabel, at: 0)
+        chipContainer.setContentHuggingPriority(.required, for: .horizontal)
+        vibeLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            vibeLabel.leadingAnchor.constraint(equalTo: chipContainer.leadingAnchor, constant: 9),
+            vibeLabel.trailingAnchor.constraint(equalTo: chipContainer.trailingAnchor, constant: -9),
+            vibeLabel.topAnchor.constraint(equalTo: chipContainer.topAnchor, constant: 3),
+            vibeLabel.bottomAnchor.constraint(equalTo: chipContainer.bottomAnchor, constant: -3),
+        ])
         
-        layer.borderColor = UIColor(theme.accentNeon).withAlphaComponent(0.35).cgColor
-        layer.borderWidth = 1.0
-        layer.cornerRadius = 999
-        label.text = spot.name
-        label.textColor = UIColor(theme.accentNeon)
-        label.font = UIFont.monoStamp
-        view.insertSubview(label, at: 0)
-        label.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 3, leading: 9, bottom: 3, trailing: 9)
+        return chipContainer
+    }
+
+    var handleView: UIView {
+        handleLabel.font = UIFont.caption
+        return handleLabel
+    }
+
+    var statusView: UIView {
+        verifiedTick.image = UIImage(systemName: "checkmark")
+
+        statusText.axis = .horizontal
+        statusLabel.font = UIFont.caption
         
-        return view
+        statusText.addArrangedSubview(verifiedTick)
+        statusText.addArrangedSubview(statusLabel)
+        
+        return statusText
     }
 }

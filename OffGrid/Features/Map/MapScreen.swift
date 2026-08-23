@@ -94,16 +94,6 @@ struct MapScreen : View {
             .padding(.bottom, 12)
         }
         .background(theme.bgRaised)
-        //        .overlay(
-        //            Rectangle()
-        //                .fill(theme.stroke)
-        //                .frame(height: 1)
-        //                .clipShape(RoundedRectangle(cornerRadius: 20))
-        ////            UnevenRoundedRectangle(
-        ////                cornerRadii: RectangleCornerRadii(topLeading: 20, bottomLeading: 20, bottomTrailing: 20, topTrailing: 20)
-        ////            )
-        ////            .frame(height: 1)
-        //        )
         .frame(maxWidth: .infinity)
         .frame(height: 274)
     }

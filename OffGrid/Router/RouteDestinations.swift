@@ -5,7 +5,7 @@ enum RouteDestinations: Hashable, Identifiable {
 }
 
 enum ModalFlow: Hashable, Identifiable {
-    case login
+    case claimHandle
     
     var id: Self { self }
 }

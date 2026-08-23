@@ -8,18 +8,16 @@ final class AuthStore {
     private let service: AuthRepository
     private(set) var state: ViewState = .idle
     
-    
     init(service: AuthRepository) {
         self.service = service
     }
     
-    func login(userHandle: String) async {
-        state = .loading
+    func login() async {
         do {
-            try await service.loginAnonymously(userHandle: userHandle)
+            try await service.loginAnonymously()
         } catch {
-            print("Failed to login: \(error)")
-            state = .failed("Failed to login")
+            debugPrint("Failed to login: \(error)")
+            state = .failed
         }
     }
     
@@ -34,10 +32,12 @@ final class AuthStore {
             if stream.event == .signedIn {
                 state = .loaded
             } else if stream.event == .signedOut {
-                state = .idle
+                state = .loggedOut
             } else if stream.event == .initialSession {
                 if stream.session?.accessToken != nil {
                     state = .loaded
+                } else {
+                    state = .loggedOut
                 }
             }
         }
@@ -47,6 +47,7 @@ final class AuthStore {
         case idle
         case loading
         case loaded
-        case failed(String)
+        case failed
+        case loggedOut
     }
 }
