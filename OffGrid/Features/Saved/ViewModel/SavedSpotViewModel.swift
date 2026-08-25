@@ -4,16 +4,16 @@ import Combine
 @MainActor
 class SavedSpotViewModel: ObservableObject {
     
+    @Published private(set) var state: State = .loading
+    let spotRepository: SpotRepository
+    let savedRepository: SavedSpotRepository
+    
     enum State: Equatable {
         case loading
         case loaded([Spot])
         case empty
         case failed
     }
-    
-    @Published private(set) var state: State = .loading
-    let spotRepository: SpotRepository
-    let savedRepository: SavedSpotRepository
     
     var availableSpots: [Spot] {
         guard case .loaded(let spots) = state else { return [] }

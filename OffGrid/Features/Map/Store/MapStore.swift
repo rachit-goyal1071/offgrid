@@ -6,16 +6,22 @@ final class MapStore {
     
     private(set) var state: ViewState = .idle
     private var repository: SpotRepository
+    var selectedVibe: Vibe?
+    var selectedPin: Spot.ID?
     
     init(repository: SpotRepository) {
         self.repository = repository
     }
     
-    var selectedVibe: Vibe?
+    func toggleSelection(_ id: Spot.ID) {
+        selectedPin = (selectedPin == id) ? nil : id
+        
+    }
+    
     var availableSpots: [Spot] {
         guard case .loaded(let spots) = state else { return [] }
-        if selectedVibe == nil { return spots }
-        return spots.filter({$0.vibe == selectedVibe})
+        if selectedVibe == nil && selectedPin == nil { return spots }
+        return spots.filter({$0.vibe == selectedVibe || $0.id == selectedPin})
     }
     
     func load() async {

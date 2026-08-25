@@ -4,9 +4,12 @@ struct DestinationFactory {
     
     @ViewBuilder
     func makeView(for destination: RouteDestinations) -> some View {
-//        switch destination {
-//            
-//        }
+        switch destination {
+        case .mapScreen:
+            MapScreen()
+        case .spotDetail(let spot):
+            SpotDetailScreen(spot: spot)
+        }
     }
     
     @ViewBuilder

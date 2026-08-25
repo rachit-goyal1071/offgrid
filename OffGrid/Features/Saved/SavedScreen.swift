@@ -3,7 +3,7 @@ import UIKit
 
 struct SavedScreen: UIViewControllerRepresentable {
     
-    @Environment(Theme.self) var theme: Theme
+    @Environment(Theme.self) var theme
     
     func makeUIViewController(context: Context) -> some UIViewController {
         SavedSpotViewController(theme: theme, vm: SavedSpotViewModel(spotRepository: container.spotRepository(), savedRepository: container.savedRepository()))

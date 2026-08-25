@@ -3,17 +3,15 @@ import SwiftUI
 
 class SpotCell: UICollectionViewCell {
     
-    private var theme: Theme?
-    private var spot: Spot?
-    let stackView = UIStackView()
-    let spotLabel = UILabel()
-    let quoteLabel = UILabel()
-    let handleLabel = UILabel()
-    let chipContainer = UIView()
-    let vibeLabel = UILabel()
-    let verifiedTick = UIImageView()
-    let statusLabel = UILabel()
-    let statusText = UIStackView()
+    private let stackView = UIStackView()
+    private let spotLabel = UILabel()
+    private let quoteLabel = UILabel()
+    private let handleLabel = UILabel()
+    private let chipContainer = UIView()
+    private let vibeLabel = UILabel()
+    private let verifiedTick = UIImageView()
+    private let statusLabel = UILabel()
+    private let statusText = UIStackView()
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -26,8 +24,6 @@ class SpotCell: UICollectionViewCell {
     }
     
     func configure(spot: Spot, theme: Theme) {
-        self.spot = spot
-        self.theme = theme
         contentView.backgroundColor = UIColor(theme.bgRaised)
         contentView.layer.borderColor = UIColor(theme.stroke).cgColor
         
@@ -80,20 +76,11 @@ class SpotCell: UICollectionViewCell {
         let spacer = UIView()
         spacer.setContentHuggingPriority(UILayoutPriority(1), for: .horizontal)
         
-        let rowOne = dataRow(views: [spotView])
-        let rowTwo = dataRow(views: [quoteView])
-        let rowThree = dataRow(views: [vibeChip, handleView, statusView, spacer])
+        let rowOne = linearStackView(views: [spotView], axis: .horizontal)
+        let rowTwo = linearStackView(views: [quoteView], axis: .horizontal)
+        let rowThree = linearStackView(views: [vibeChip, handleView, statusView, spacer], axis: .horizontal)
         
         [rowOne, rowTwo, rowThree].forEach { stackView.addArrangedSubview($0) }
-    }
-    
-    func dataRow(views: [UIView], spacing: CGFloat = 8) -> UIView {
-        let view = UIStackView()
-        view.spacing = spacing
-        
-        views.forEach { view.addArrangedSubview($0) }
-        view.axis = .horizontal
-        return view
     }
     
     var spotView: UIView {

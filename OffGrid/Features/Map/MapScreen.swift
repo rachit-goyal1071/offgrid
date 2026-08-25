@@ -5,6 +5,7 @@ import MapKit
 struct MapScreen : View {
     
     @Environment(Theme.self) private var theme
+    @Environment(AppCoordinator.self) private var app
     @State private var store: MapStore
     @State private var cameraPosition: MapCameraPosition = .automatic
     private var availableSpots: [Spot] {store.availableSpots}
@@ -14,6 +15,8 @@ struct MapScreen : View {
     }
     
     var body: some View {
+        let selectedPin = store.selectedPin
+        
         Group {
             switch store.state {
             case .idle, .loading:
@@ -24,7 +27,15 @@ struct MapScreen : View {
                 Map(position: $cameraPosition){
                     ForEach(availableSpots) { spot in
                         Annotation(spot.name,coordinate: CLLocationCoordinate2D(latitude: spot.coordinates.latitude,longitude: spot.coordinates.longitude)){
-                            GeneralMapPin(verified: spot.verified)
+                            Button (action: {
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    store.toggleSelection(spot.id)
+                                    cameraPosition = .automatic
+                                }
+                            }) {
+                                GeneralMapPin(verified: spot.verified,
+                                              isSelected: spot.id == selectedPin)
+                            }
                         }
                     }
                 }
@@ -39,7 +50,9 @@ struct MapScreen : View {
                 }
             }
         }
-        .task { await store.load() }
+        .task {
+            guard store.availableSpots.isEmpty else { return }
+            await store.load() }
     }
     
     private var vibeRow: some View {
@@ -72,6 +85,7 @@ struct MapScreen : View {
                 .padding(12)
             
             HStack(alignment: .center) {
+                
                 Text("\(availableSpots.count) spots available for")
                     .font(.buttonM)
                     .foregroundColor(theme.textSecondary)
@@ -86,7 +100,11 @@ struct MapScreen : View {
             ScrollView(.horizontal) {
                 HStack(spacing: 12) {
                     ForEach(availableSpots) { spot in
-                        SpotCard(spot: spot)
+                        Button(action: {
+                            app.mapRouter.push(.spotDetail(spot: spot))
+                        }) {
+                            SpotCard(spot: spot)
+                        }
                     }
                 }
                 .padding(.horizontal, 10)

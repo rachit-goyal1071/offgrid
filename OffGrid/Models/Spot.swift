@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Spot: Codable, Identifiable, Sendable, Equatable {
+public struct Spot: Codable, Identifiable, Sendable, Equatable, Hashable {
     
     public let id: UUID
     public let name: String
@@ -30,7 +30,7 @@ public struct Spot: Codable, Identifiable, Sendable, Equatable {
     }
 }
 
-public struct Coordinates: Codable, Equatable {
+public struct Coordinates: Codable, Equatable, Hashable {
     public var latitude: Double
     public var longitude: Double
 }

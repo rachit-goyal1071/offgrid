@@ -38,7 +38,8 @@ struct RootView: View {
     
     private var mainTabs: some View {
         TabView() {
-            MapScreen()
+//            MapScreen()
+            tabStack(root: MapScreen(), router: app.mapRouter)
                 .tabItem { Label("map", systemImage: "map") }
                 .tag(AppCoordinator.Tab.map)
             SavedScreen()

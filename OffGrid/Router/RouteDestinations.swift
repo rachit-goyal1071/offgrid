@@ -1,5 +1,6 @@
 enum RouteDestinations: Hashable, Identifiable {
     case mapScreen
+    case spotDetail(spot: Spot)
     
     var id: Self { self }
 }
