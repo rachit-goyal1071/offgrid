@@ -24,7 +24,7 @@ class SpotDetailNameInfoCard: UIView {
     
     func configure(theme: Theme, spotName: String, vibe: Vibe, distance: Double, upvotes: Int) {
         
-        spotLabel.text = spotName
+        spotLabel.text = spotName.lowercased()
         spotLabel.textColor = UIColor(theme.textPrimary)
         
         vibeLabel.text = vibe.rawValue
@@ -49,24 +49,41 @@ class SpotDetailNameInfoCard: UIView {
     func setupLayout() {
         
         // MARK: - Name Label
-        spotLabel.font = UIFont.titleM
+        spotLabel.font = UIFont.titleS
+        spotLabel.numberOfLines = 2
+        spotLabel.lineBreakMode = .byTruncatingTail
         
         // MARK: - Upvote arrows and count window
         upvoteContainer.layer.borderWidth = 1.0
         upvoteContainer.layer.cornerRadius = 14.0
         
         arrowUp.image = UIImage(systemName: "arrow.up")
-        upvoteCountLabel.font = UIFont.buttonL
+        arrowUp.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            arrowUp.widthAnchor.constraint(equalToConstant: 26),
+            arrowUp.heightAnchor.constraint(equalToConstant: 18)
+        ])
+        upvoteCountLabel.font = UIFont.buttonM
+        upvoteCountLabel.lineBreakMode = .byTruncatingTail
         arrowDown.image = UIImage(systemName: "arrow.down")
+        arrowDown.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            arrowDown.widthAnchor.constraint(equalToConstant: 26),
+            arrowDown.heightAnchor.constraint(equalToConstant: 18)
+        ])
         
-        let upvoteStack = linearStackView(views: [arrowUp, upvoteCountLabel, arrowDown], spacing: 4, axis: .vertical)
+        let upvoteStack = linearStackView(views: [arrowUp, upvoteCountLabel, arrowDown], spacing: 2, axis: .vertical, distribution: .fill, alignment: .center)
         upvoteStack.translatesAutoresizingMaskIntoConstraints = false
+        upvoteContainer.setContentHuggingPriority(.required, for: .horizontal)
+        upvoteContainer.setContentCompressionResistancePriority(.required, for: .horizontal)
         
         upvoteContainer.addSubview(upvoteStack)
         
         NSLayoutConstraint.activate([
-            upvoteStack.leadingAnchor.constraint(equalTo: upvoteContainer.leadingAnchor, constant: 9),
-            upvoteStack.trailingAnchor.constraint(equalTo: upvoteContainer.trailingAnchor, constant: -9),
+            upvoteStack.leadingAnchor.constraint(equalTo: upvoteContainer.leadingAnchor, constant: 4),
+            upvoteStack.trailingAnchor.constraint(equalTo: upvoteContainer.trailingAnchor, constant: -4),
             upvoteStack.topAnchor.constraint(equalTo: upvoteContainer.topAnchor, constant: 3),
             upvoteStack.bottomAnchor.constraint(equalTo: upvoteContainer.bottomAnchor, constant: -3),
         ])
@@ -92,17 +109,18 @@ class SpotDetailNameInfoCard: UIView {
         distanceLabel.font = UIFont.buttonM
         
         // MARK: - Bottom Info Row
-        let spacer = UIView()
-        spacer.setContentHuggingPriority(UILayoutPriority(2), for: .horizontal)
-        let infoRow = linearStackView(views: [chipContainer, distanceLabel], axis: .horizontal)
+        let infoSpacer = UIView()
+        infoSpacer.setContentHuggingPriority(UILayoutPriority(1), for: .horizontal)
+        let infoRow = linearStackView(views: [chipContainer, distanceLabel], axis: .horizontal, distribution: .fillProportionally)
         
         // MARK: - Name and Info Column
-        let nameAndInfoColumn = linearStackView(views: [spotLabel, infoRow], spacing: 12, axis: .vertical)
+        let nameAndInfoColumn = linearStackView(views: [spotLabel, infoRow, infoSpacer], spacing: 8, axis: .vertical, distribution: .fill)
         
         // MARK: - Main Data Row
         self.translatesAutoresizingMaskIntoConstraints = false
         
-        let mainDataRow = linearStackView(views: [nameAndInfoColumn, spacer, upvoteContainer], spacing: 0, axis: .horizontal)
+        let mainDataRow = linearStackView(views: [nameAndInfoColumn, upvoteContainer], spacing: 0, axis: .horizontal, distribution: .fillProportionally)
+        
         self.addSubview(mainDataRow)
         
         mainDataRow.translatesAutoresizingMaskIntoConstraints = false
@@ -110,8 +128,8 @@ class SpotDetailNameInfoCard: UIView {
         NSLayoutConstraint.activate([
             mainDataRow.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 14),
             mainDataRow.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -14),
-            mainDataRow.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
-            mainDataRow.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -16),
+            mainDataRow.topAnchor.constraint(equalTo: self.topAnchor, constant: 12),
+            mainDataRow.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
         ])
         
     }

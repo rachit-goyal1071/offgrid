@@ -7,11 +7,16 @@ class SpotDetailViewController: UIViewController {
     private let contentStack = UIStackView()
     private let spot: Spot
     private let nameInfoCard = SpotDetailNameInfoCard()
+    private let carousalCard = SpotDetailImageCarousel()
+    private let spotDetailDescriptionCard = SpotDetailDescriptionCard()
+    private let spotDetailUserInfoCard = SpotDetailUserInfoCard()
+    private let savedStore: SavedStore
     
-    init(theme: Theme, vm: SpotDetailViewModel, spot: Spot) {
+    init(theme: Theme, vm: SpotDetailViewModel, spot: Spot, store: SavedStore) {
         self.theme = theme
         self.vm = vm
         self.spot = spot
+        self.savedStore = store
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -32,6 +37,15 @@ class SpotDetailViewController: UIViewController {
     
     private func configureViews() {
         nameInfoCard.configure(theme: self.theme, spotName: spot.name, vibe: spot.vibe, distance: 1.3, upvotes: spot.upvotes)
+        carousalCard.configure(theme: theme, images: spot.images, createdAt: spot.createdAt)
+        spotDetailDescriptionCard.configure(
+            description: spot.description ?? "",
+            theme: theme, coordinates: spot.coordinates,
+            saveAction: UIAction { [weak self] _ in
+            guard self?.spot.id != nil else { return }
+            self?.savedStore.toggle(id: self?.spot.id ?? UUID())
+        })
+        spotDetailUserInfoCard.configure(handle: spot.posterHandle, lastCheckedIn: "4 days ago", isVerified: spot.verified, status: "local for 2 years", theme: theme)
         view.addSubview(scrollView)
         let safeArea = view.safeAreaLayoutGuide
 
@@ -44,8 +58,21 @@ class SpotDetailViewController: UIViewController {
         scrollView.addSubview(contentStack)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentStack.translatesAutoresizingMaskIntoConstraints = false
+        contentStack.addArrangedSubview(carousalCard)
         contentStack.addArrangedSubview(nameInfoCard)
+        contentStack.addArrangedSubview(spotDetailDescriptionCard)
+        contentStack.addArrangedSubview(spotDetailUserInfoCard)
         contentStack.axis = .vertical
+        contentStack.spacing = 6
+        
+        NSLayoutConstraint.activate([
+            contentStack.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentStack.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            carousalCard.heightAnchor.constraint(equalToConstant: 280)
+        ])
+        
     }
-    
 }
