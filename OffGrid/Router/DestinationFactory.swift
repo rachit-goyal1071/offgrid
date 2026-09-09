@@ -1,4 +1,5 @@
 import SwiftUI
+import WeatherUI
 
 struct DestinationFactory {
     
@@ -9,6 +10,8 @@ struct DestinationFactory {
             MapScreen()
         case .spotDetail(let spot):
             SpotDetailScreen(spot: spot)
+        case .weatherScreen(let locationQuery, let cityName):
+            WeatherDetailView(query: locationQuery, cityName: cityName, repository: container.weatherRepository)
         }
     }
     

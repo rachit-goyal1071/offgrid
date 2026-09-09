@@ -76,12 +76,11 @@ class SpotDetailNameInfoCard: UIView {
         
         let upvoteStack = linearStackView(views: [arrowUp, upvoteCountLabel, arrowDown], spacing: 2, axis: .vertical, distribution: .fill, alignment: .center)
         upvoteStack.translatesAutoresizingMaskIntoConstraints = false
-        upvoteContainer.setContentHuggingPriority(.required, for: .horizontal)
-        upvoteContainer.setContentCompressionResistancePriority(.required, for: .horizontal)
         
         upvoteContainer.addSubview(upvoteStack)
         
         NSLayoutConstraint.activate([
+            upvoteContainer.widthAnchor.constraint(equalToConstant: 46),
             upvoteStack.leadingAnchor.constraint(equalTo: upvoteContainer.leadingAnchor, constant: 4),
             upvoteStack.trailingAnchor.constraint(equalTo: upvoteContainer.trailingAnchor, constant: -4),
             upvoteStack.topAnchor.constraint(equalTo: upvoteContainer.topAnchor, constant: 3),
@@ -109,9 +108,18 @@ class SpotDetailNameInfoCard: UIView {
         distanceLabel.font = UIFont.buttonM
         
         // MARK: - Bottom Info Row
+        let horizontalSpacer = UIView()
+        horizontalSpacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
         let infoSpacer = UIView()
         infoSpacer.setContentHuggingPriority(UILayoutPriority(1), for: .horizontal)
-        let infoRow = linearStackView(views: [chipContainer, distanceLabel], axis: .horizontal, distribution: .fillProportionally)
+        
+        let infoRow = linearStackView(
+            views: [chipContainer, distanceLabel, horizontalSpacer],
+            spacing: 8,
+            axis: .horizontal,
+            distribution: .fill,
+            alignment: .center
+        )
         
         // MARK: - Name and Info Column
         let nameAndInfoColumn = linearStackView(views: [spotLabel, infoRow, infoSpacer], spacing: 8, axis: .vertical, distribution: .fill)
@@ -119,8 +127,8 @@ class SpotDetailNameInfoCard: UIView {
         // MARK: - Main Data Row
         self.translatesAutoresizingMaskIntoConstraints = false
         
-        let mainDataRow = linearStackView(views: [nameAndInfoColumn, upvoteContainer], spacing: 0, axis: .horizontal, distribution: .fillProportionally)
-        
+        let mainDataRow = linearStackView(views: [nameAndInfoColumn, upvoteContainer], spacing: 16, axis: .horizontal, distribution: .fill)
+    
         self.addSubview(mainDataRow)
         
         mainDataRow.translatesAutoresizingMaskIntoConstraints = false

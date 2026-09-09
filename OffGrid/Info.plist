@@ -2,11 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BaseUrl</key>
+	<string>https://api.weatherapi.com/v1</string>
+	<key>SupabaseKey</key>
+	<string>$(SUPABASE_KEY)</string>
+	<key>SupabaseUrl</key>
+	<string>$(SUPABASE_URL)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>SpaceGrotesk-Medium.ttf</string>
 		<string>SpaceGrotesk-SemiBold.ttf</string>
 		<string>IBMPlexMono-Regular.ttf</string>
 	</array>
+	<key>WeatherAPIKey</key>
+	<string>$(WEATHER_API_KEY)</string>
 </dict>
 </plist>

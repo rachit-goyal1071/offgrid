@@ -7,6 +7,6 @@ final class Config {
     private init() {}
     
     let client = SupabaseClient(
-        supabaseURL: URL(string: SUPABASE_URL)!, supabaseKey: SUPABASE_KEY
+        supabaseURL: URL(string: Secrets.supabaseUrl)!, supabaseKey: Secrets.supabaseKey
     )
 }

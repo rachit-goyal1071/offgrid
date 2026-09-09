@@ -9,6 +9,8 @@ class SavedSpotViewController: UIViewController {
     private var vm: SavedSpotViewModel
     private var cancellables = Set<AnyCancellable>()
     
+    @IBOutlet weak var uilabelnew: UILabel!
+    
     nonisolated enum Section { case main }
     
     init(theme: Theme, vm: SavedSpotViewModel) {
@@ -37,6 +39,9 @@ class SavedSpotViewController: UIViewController {
         Task {
             await vm.load()
         }
+    }
+    @IBAction func uibutton(_ sender: Any) {
+        
     }
     
     private func render(_ state: SavedSpotViewModel.State) {

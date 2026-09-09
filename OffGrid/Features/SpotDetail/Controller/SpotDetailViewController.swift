@@ -41,10 +41,9 @@ class SpotDetailViewController: UIViewController {
         spotDetailDescriptionCard.configure(
             description: spot.description ?? "",
             theme: theme, coordinates: spot.coordinates,
-            saveAction: UIAction { [weak self] _ in
-            guard self?.spot.id != nil else { return }
-            self?.savedStore.toggle(id: self?.spot.id ?? UUID())
-        })
+            savedStore: savedStore,
+            id: spot.id
+        )
         spotDetailUserInfoCard.configure(handle: spot.posterHandle, lastCheckedIn: "4 days ago", isVerified: spot.verified, status: "local for 2 years", theme: theme)
         view.addSubview(scrollView)
         let safeArea = view.safeAreaLayoutGuide

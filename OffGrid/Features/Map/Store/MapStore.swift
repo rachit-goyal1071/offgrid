@@ -26,6 +26,7 @@ final class MapStore {
     
     func load() async {
         state = .loading
+        guard availableSpots.isEmpty else { return }
         do {
             let spots = try await repository.fetchSpots()
             state = .loaded(spots)

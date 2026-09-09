@@ -11,7 +11,7 @@ struct MapScreen : View {
     private var availableSpots: [Spot] {store.availableSpots}
     
     init() {
-        _store = State(initialValue: container.mapStore())
+        _store = State(initialValue: container.mapStore)
     }
     
     var body: some View {
@@ -45,14 +45,18 @@ struct MapScreen : View {
                 .safeAreaInset(edge: .top) {
                     vibeRow
                 }
+                .safeAreaInset(edge: .top, alignment: .leading) {
+                    WeatherChip(coordinates: store.availableSpots[0].coordinates)
+                        .padding(.horizontal, 16)
+                }
                 .safeAreaInset(edge: .bottom) {
                     spotsPanel
                 }
             }
         }
         .task {
-            guard store.availableSpots.isEmpty else { return }
-            await store.load() }
+            await store.load()
+        }
     }
     
     private var vibeRow: some View {

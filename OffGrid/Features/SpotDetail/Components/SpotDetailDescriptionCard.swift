@@ -8,6 +8,7 @@ class SpotDetailDescriptionCard: UIView {
     let descriptionLabel = UILabel()
     let directionButton = UIButton()
     let saveButton = UIButton()
+    var saved: Bool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,7 +20,10 @@ class SpotDetailDescriptionCard: UIView {
         setupLayout()
     }
     
-    func configure(description: String, theme: Theme, coordinates: Coordinates, saveAction: UIAction) {
+    func configure(description: String, theme: Theme, coordinates: Coordinates, savedStore: SavedStore, id: UUID) {
+        saved = savedStore.isSaved(id: id)
+        updateSaveButton()
+        
         descriptionLabel.text = description.lowercased()
         descriptionLabel.font = UIFont.buttonL
         descriptionLabel.textColor = UIColor(theme.textPrimary)
@@ -33,11 +37,21 @@ class SpotDetailDescriptionCard: UIView {
         directionButton.addAction(directionAction, for: .touchUpInside)
         
         saveButton.layer.backgroundColor = UIColor(theme.bgRaised).cgColor
-        saveButton.setTitleColor(UIColor(theme.textPrimary),for: .normal)
+        
         saveButton.layer.cornerRadius = 12
         saveButton.layer.borderColor = UIColor(theme.stroke).cgColor
         saveButton.layer.borderWidth = 1
+        let saveAction = UIAction { [weak self] _ in
+            savedStore.toggle(id: id)
+            self?.saved = savedStore.isSaved(id: id)
+            updateSaveButton()
+        }
         saveButton.addAction(saveAction, for: .touchUpInside)
+        
+        func updateSaveButton() {
+            saveButton.setTitleColor(UIColor( saved ? theme.accentNeon : theme.textPrimary),for: .normal)
+            saveButton.setTitle(saved ? "unsave" : "save", for: .normal)
+        }
     }
     
     func setupLayout() {
@@ -51,7 +65,6 @@ class SpotDetailDescriptionCard: UIView {
         directionButton.titleLabel?.font = UIFont.buttonM
         directionButton.configuration = config
         
-        saveButton.setTitle("save", for: .normal)
         saveButton.titleLabel?.font = UIFont.buttonM
         saveButton.configuration = config
         
